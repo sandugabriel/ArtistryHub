@@ -1,347 +1,533 @@
-# Changelog
-
-## RBP v4: "The One With Hooks (And Much More)" Edition (April 2019)
-
-### News
-
-React Boilerplate v4.0.0 is out and it's a doozy! Here are the highlights:
-
-- React has added many new features and it's time for React Boilerplate to embrace them.
-  - We now use `React.lazy` and `Suspense` for component lazy-loading instead of an external library.
-  - We've added `useInjectSaga` and `useInjectReducer` hooks to manage saga and reducer injection. They're integrated into the generators and thus become the new defaults. (Should you need them, the HOCs are still there.)
-  - The generators don't support classes anymore. The `PureComponent` vs `Component` choice was replaced with an option to wrap your component inside `React.memo`.
-- After much deliberation, `Immutable.js` is finally gone. We've added `Immer` instead. With it, we can write very concise and readable reducers while sticking to native JavaScript data structures.
-- Following the release of React Hooks, it's become even clearer that `react-testing-library` is now the industry-standard for React DOM testing. Workarounds for the incompatibilities between `enzyme` and `styled-components` are gone and we can now write leaner and more meaningful tests.
-
-There are many more changes to our documentation, internals and general project setup. You can find a full changelog below.
-
-Huge thanks to @Mensae, @gretzky, @jwinn and everyone who helped review or submit PRs! If I've forgotten your contribution in the credits below, please let me know.
-
-We hope you enjoy this release and welcome any feedback, bug reports or feature suggestions you can send our way!
+# 2.1.0
 
-### Main
+- Migrate to `css-minifier-webpack-plugin`
 
-- **Remove `Immutable.js` in favor of `Immer`** (**@julienben**, **@robertaird**)
-- **Migrate from `enzyme` to `react-testing-library`** (**@mensae**)
-  - New instructions for snapshot and behavior testing
-- **Embracing Hooks** (**@julienben**)
-  - Add `eslint-plugin-react-hooks`
-  - Migrate all class components to functions
-  - Add `useInjectSaga` and `useInjectReducer` hooks
-  - Remove generator options to extend `Component` or `PureComponent`. Replace with a `React.memo` option.
-- **Use `React.lazy` and `Suspense` instead of `loadable-components` to code-split and asynchronously load components** (**@julienben**)
-
-### Documentation updates
-
-- Update Heroku deployment instructions (**@TheAncientGoat**)
-- Add subfolder deployment instructions (**@nshimiye**)
-- Add AWS EB deployment instructions (**@Al-un**)
-- Spelling and grammar fixes (**@khayyamsaleem**, **@ngtan**)
-
-### Internals updates
-
-- Many dependency updates including: (**@julienben**)
-  - react and react-dom (`16.6` to `16.8.6`)
-  - react-redux (`5` to `7`) (**@bumi001**, **@jwinn**)
-  - connected-react-router (`4` to `6`)
-  - react-router-dom (`4` to `5`)
-  - redux-saga (`0.16` to `1`)
-  - sanitize.css (`4` to `8`)
-- Update default saga injection mode to DAEMON (**@howardya**)
-- Update generators to reflect all the stack changes
-- Migrate default Node version to `lts/dubnium` (**@julienben**)
-- Fix support for `stylelint` (**@jwinn**)
-- Fix setup script for Windows environments (**@mensae**)
-- Generate passing tests for components/containers (**@mjhost**)
-- Rewrite generators code (**@mensae**)
-- Complete rewrite or `generate-templates-for-linting.js` (**@mensae**)
-- `webpack.DefinePlugin` => `webpack.EnvironmentPlugin` (**@nshimiye**)
-- New Webpack code splitting config (**@julienben**)
-- Remove `process.noDeprecation = true` (**@spawnia**)
-- Miscellaneous fixes (**@ngtan**)
-
-### Project maintenance
-
-- Switch from Gitter to Spectrum (**@gretzky**)
-- Update Code of Conduct and Contribution Guidelines (**@julienben**)
-- New Issue Templates (**@gretzky**)
-- New bots to help with issue management (**@gretzky**)
-- Better recognition of contributors via adherence to [All Contributors](https://allcontributors.org/) specification (**@julienben**)
-
-## 3.7 October 2018
-
-### News
-
-Welcome to a new React Boilerplate release with improvements aplenty, bug fixes and major dependency upgrades! Big thanks to @gretzky, @justingreenberg, @jwinn and everyone who helped review and submit PRs for this release!
-
-For existing projects, the only way to upgrade from `3.6.0` is to manually apply the changes from #2403 to your project. Please be careful when doing so as it isn't officially supported and could break things on your end.
-
-Next steps will include re-thinking immutability in the store (RFC @ #2092), re-organizing docs, saga improvements, smart bundling and plenty more. Please keep the PRs coming. And if you're up for it, remember that you can use the dev branch to test all the latest updates and report bugs!
-
-### Main
-
-- **Upgrades to Babel 7, React 16.6, ESLint 5, styled-components 4** (@julienben)
-  - Config file and Babel plugin cleanup (@gretzky)
-  - Fix extract-intl script for Babel 7 (@fanixk)
-- **Webpack improvements**
-  - Removal of dll plugin (@gretzky)
-  - Gzipping and better optimization config in prod (@gretzky)
-  - react-app-polyfill for targeted IE support (@gretzky)
-  - Switch from UglifyJS to Terser plugin (@robertaird)
-  - Icons generated by webpack-pwa-manifest plugin (@Mensae)
-- **Switch from Yarn back to npm** (@julienben)
-  - CI improvements (@jwinn)
-- **New documentation section for forks**
-  - SSR (@gretzky)
-  - Electron (@mjangir)
-  - TypeScript (@Can-Sahin)
-
-### Other Updates
-
-- Migration from deprecated react-router-redux to connected-react-router (@julienben)
-- Migration from react-loadable to loadable-components (@julienben)
-- Quick start - Clone to a named directory (@spawnia)
-- Scoped variables in i18n messages (@hatsuo)
-- Use .prettierrc path relative to .eslintrc.js (@abeMedia)
-- Fixes to generators (@julienben, @hatsuo, @ngtan)
-- babel-plugin-lodash for easier import syntax (@julienben)
-- Bug fix in setup script (@autechr3)
-
-Lots of additional documentation updates thanks to @doaboa, @cheickmec, @nicogreenarry, @sduquej, @diwakar-s-maurya.
-
-## 3.6 June 2018
-
-### News
-
-Major version updates are finally here! It's been awhile, but we're a small team that's been pushing this for awhile. Thanks to several users' PRs, we were able to cherry-pick a lot from the dev branch to push this release out. We decided because of the amount of dependencies that needed to be updated- we would overshoot some of the changes made on the dev branch and just grab the most pressing ones.
-
-Next steps for us will be revisiting the dev branch, revisiting outstanding PRs and RFCs (like Immutable), and also plugging away at a create-react-app spinoff for react-boilerplate.
-
-### Main
-
-- **Upgrade Webpack to v4** (@julienben @stern-shawn)
-  - Syntax / function changes (mode, optimization, etc.)
-  - Remove webpack loader syntax from main app
-  - Better SVG handling
-- **Upgrade Redux to v4** (@gretzky)
-- **Upgrade React to v16** (@blling @gretzky)
-- **Upgrade Enzyme to v3** (@blling @gretzky)
-  - Add in new Adapter, as required
-  - Minor Jest config tweaks to include new Enzyme setup config
-- **Upgrade styled-components to v3** (@julienben)
-  - Reconfigure Jest snapshot testing for styled-components (@gretzky)
-- **Added support for node v9, v8** (@julienben)
-  - Removed support for node v6
-- **Add Prettier** (@julienben)
-- **Upgrade ESLint to v4** (@julienben)
-- **Add stylelint and stylelint config** (@julienben)
-
-### Other Updates
-
-- Add `--fix` flag to eslint command (@shobhitchittora)
-- Correct babel plugin order (@petrhanak)
-- Add missing `import PropTypes` to component generators (@GoldAnna)
-- Remove unnecessary `onRejected()` from FontFaceObserver (@akarve)
-- Include "Setting Up Your Editor" in documentation (@mjbvz)
-- Add login / authentication flow example into documentation (@tinavanschelt)
-- More detailed redux-saga usage documentation (@acharlop)
-- Fix ejection error of done sagas (@outdooricon)
-
-## 3.5 September 2017
-
-### News
-
-So, a few things have changed in the JS ecosystem since the original release of React Boilerplate, and there was a discussion in #1776 around the it's future. TLDR; we had two incompatible PRs — one for server-side rendering, and another for react-router v4. The community decided that we would keep our dependencies up to date (upgrade react-router) and establish a clear mission for React Boilerplate:
-
-**React Boilerplate is a rock-solid foundation for crafting large, high-performance enterprise-grade frontend web applications that have advanced/custom requirements.**
-
-- Static output designed for CDN and edge caches
-- Extreme Developer Ergonomics
-  - Parallelized Tests
-  - DLL manifest in development for blazing rebuilds
-  - Scaffolding tools
-- Pre-baked i18n support
-- Low level tooling that gives developer complete control
-
-We may include SSR in a future version, but for now this is our focus... create-react-app and next.js are doing an awesome job and strongly recommend these projects for most use cases.
-
-### Breaking
-
-- **Upgrade React Router to v4.x.x** (@anuraaga, @Dattaya, et al)
-  - Use React-Loadable for data lifecycle management
-  - Refactor `asyncInjectors`: improve code splitting/saga management
-  - For a complete overview of changes, please see #1746
-
-### Main
-
-- **Upgrade React to v15.6** (@g0ddish)
-- **Upgrade Webpack and related dependencies to v3.x.x** (@KarandikarMihir)
-- **Upgrade `styled-components` to v2.x.x** (@justingreenberg)
-- Replace `babel-preset-hmre` with vanilla Webpack HMR (@Dattaya)
-- Serve Dlls via `add-asset-html-webpack-plugin` (@skidding)
-- Migrate from `React.PropTypes` to `prop-types` (@dennybiasioll
-
-### Other Updates
-
-- Add Stateless Functions to Container generator (@outdooricon)
-- Change development sourcemap style (@samit4me)
-- Create new documentation for dependency updates (@gihrig)
-- Downgrade `sanitize.css` (@Dattaya)
-- Enable rule `react/no-array-index-key` (@carloscuatin)
-- Fix `Intl` polyfill in language generator (@tmf)
-- Handle 204 and 205 HTTP response (@williamdclt)
-- Icon updates and improvements (@samit4me)
-- Import only necessary components for RRv4 (@sorin-davidoi)
-- Improve `<List>` component tests (@chaintng)
-- Improve component tests in demo (@dennybiasiolli)
-- Improve setup to recognize repo before clearing git (@Aftabnack)
-- Make build output less verbose (@KarandikarMihir)
-- Move `onSubmitForm` test into `mapDispatchToProps` test (@tomasfrancisco)
-- NPM script and dependency updates, many fixes (@gihrig)
-- Remove state update in componentWillUpdate (@mawi12345)
-- Remove unused Sinon dependency (@avdeev)
-- Remove route names from `app/routes` (@beardedtim)
-- Rename `store.js` to `configureStore.js` to prevent conflict (@howardya)
-- Separate `dev` and `prod` middleware (@tomazy)
-- Sort ESLint config in `package.json` (@bt)
-- Support OpenType fonts with `.otf` file extension (@kachkaev)
-- Turn `App` into a functional component (@Dattaya)
-- Update FAQ for styles getting overridden (@samit4me)
-- Update the 'tagged template literals' link (@joncass)
-- Use camelcase for reducer and saga key to match selector (@anuraaga)
-- Use correct selector names in tests (@Dattaya)
-- Use local instance of `shelljs` (@KarandikarMihir)
-- Use optimized version of the RBP banner (@tomazy)
-- Use relative path for `manifest.json` (@mrharel)
-
-Many fixes to documentation thanks to @Aftabnack, @auchenberg, @danielrob, @gregoralbrecht, @JonathanMerklin, @marciopuga, @NicholasAnthony, @Skaronator, and @vedatmahir
-
-## 3.4 January 2017
-
-### Main
-
-- **Switch to Jest for testing**, massive thanks to @dmitriiabramov
-- **Update to webpack 2 RC** (includes switching from `System.import` to `import()`), thanks to @Dattaya
-- **Add progress bar while loading code splitted routes**, thanks to @KarandikarMihir
-- **Add the "Hitchhikers Guide to `react-boilerplate` to the docs**, massive thanks to @KarandikarMihir
-- Update all dependencies, as always huge thanks to @gihrig, our master of dependencies
-- Enable `import/first` eslint rule and rewrite all imports, huge thanks to @KarandikarMihir
-- Add Node v7 support and deprecate v4 support, thanks to @samit4me @MariusRumpf
-- Prevent i18n language duplication, thanks to @harijoe
-- Add the webpack circular dependency plugin to avoid hard to debug errors, thanks to @haikyuu
-- Refactor all selectors and generators with new naming convention, thanks to @Dattaya
-- Update generator templates, thanks to @Virsaviya @jeremyadavis
-- Add support for the `--host` parameter when running `npm start`, thanks to @ifedotov
-- Showcase reselects `createStructuredSelector` in the example, thanks to @Dattaya
-- Exclude test files from coverage report, thanks to @samit4me
-- Lint the templates for the generators, thanks to @Dattaya
-- Huge improvement to DX testing a freshly cleaned project, thanks to @outdooricon
-
-### Other Updates
-
-- **Remove the webpack DedupePlugin** as it leads to errors in production and is now included by default, thanks to @samit4me
-- Remove the `npm run pagespeed` command and all related dependencies and files, thanks to @mkhazov
-- Trigger a full page reload when HMR fails, thanks @kachkaev
-- Don't import all of lodash, thanks to @jwinn
-- Improve `.editconfig`, thanks to @avdeev
-- Improve the example components, thanks to @tomazy
-- Fix `npm run clean` not working as expected, thanks to @adjnor
-- Fix the i18n button not updating with new state, thanks to @adjnor
-- Fix console error when changing language, thanks to @samit4me
-- Fix default polyfill language, thanks to @web2style
-- Fix language generation, thanks to @chaintng
-- Switch to new webpack query syntax, thanks to @shrynx
-- Add an Introductory document to help people get started, thanks to @KarandikarMihir
-- Add security configuration recommendations for Nginx (`.nginx.conf`), thanks to @supergicko
-- Add and fix lots to stuff in the documentation, thanks to @pavlin-policar, @samit4me @outdooricon @PierrickGT @nndung179 @outdooricon @kelsonic @jimmyheaddon
-- A wide variety of small fixes, thanks to @Dattaya @gihrig @outdooricon
-
-### News
-
-Welcome @KarandikarMihir to the team! Karandikar has been all over the repo, providing fixes and features. Happy to have him on board to make `react-boilerplate` even better!
-
-Special thanks as always to @gihrig for diligently testing everything and keeping our dependencies up to date!
-
-Also, huge props to @samit4me and @Dattaya for being everywhere and fixing so many issues and of course to @KarandikarMihir for all his hard work.
-
-If you want to help us make react-boilerplate great, please use the `dev` branch, test all the things and report all the bugs!
-
-### Supporters
-
-This release was made possible by [Fullstack React](https://www.fullstackreact.com/) and [Serverless](http://serverless.com)! _Want to support us too? [Click here!](http://opencollective.com/react-boilerplate)_
-
-## RBP v3.0: The "JS Fatigue Antivenin" Edition
-
-React Boilerplate (RBP) v3.0.0 is out, and it's a _complete_ rewrite! :tada:
-
-We've focused on becoming a rock-solid foundation to start your next project
-with, no matter what its scale. You get to focus on writing your app because we
-focus on making that as easy as pie.
-
-website!
-
-## Highlights
-
-- **Scaffolding**: Thanks to @somus, you can now run `npm run generate` in your
-  terminal and immediately create new components, containers, sagas, routes and
-  selectors! No more context switching, no more "Create new file, copy and paste
-  that boilerplate structure, bla bla": just `npm run generate <thing>` and go.
-
-  Oh... and starting a project got a whole lot easier too: `npm run setup`. Done.
-
-- **Revamped architecture**: Following the incredible discussion in #27 (thanks
-  everybody for sharing your thoughts), we now have a weapons-grade, domain-driven
-  application architecture.
-
-  "Smart" containers are now isolated from stateless and/or generic components,
-  tests are now co-located with the code that they validate.
-
-- **New industry-standard JS utilities** We're now making the most of...
-
-  - ImmutableJS
-  - reselect
-  - react-router-redux
-  - redux-saga
-
-- **Huge CSS Improvements**
-
-  - _[CSS Modules](docs/css/css-modules.md)_: Finally, truly modular, reusable
-    styles!
-  - _Page-specific CSS_: smart Webpack configuration means that only the CSS
-    your components need is served
-  - _Standards rock:_ Nothing beats consistent styling so we beefed up the
-    quality checks with **[stylelint](docs/css/stylelint.md)** to help ensure
-    that you and your team stay on point.
-
-- **Performance**
-
-  - _Code splitting_: splitting/chunking by route means the leanest, meanest
-    payload (because the fastest code is the code you don't load!)
-
-- **Testing setup**: Thanks to @jbinto's herculean efforts, testing is now a
-  first-class citizen of this boilerplate. (the example app has _99% test coverage!_)
-  Karma and enzyme take care of unit testing, while ngrok tunnels your local
-  server for access from anywhere in the world – perfect for testing on different
-  devices in different locations.
-
-- **New server setup**: Thanks to the mighty @grabbou, we now use express.js to
-  give users a production-ready server right out of the box. Hot reloading is
-  still as available as always, but adding a custom API or a non-React page to
-  your application is now easier than ever :smile:
-
-- **Cleaner layout:** We've taken no prisoners with our approach to keeping your
-  code the star of the show: wherever possible, the new file layout keeps the
-  config in the background so that you can keep your focus where it needs to be.
-
-- **Documentation**: Thanks to @oliverturner, this boilerplate has some of the best
-  documentation going. Not just clearly explained usage guides, but easy-to-follow
-  _removal_ guides for most features too. RBP is just a launchpad: don't want to
-  use a bundled feature? Get rid of it quickly and easily without having to dig
-  through the code.
-
-- **Countless small improvements**: Everything, from linting pre-commit (thanks
-  @okonet!) to code splitting to cross-OS compatibility is now tested and ready
-  to go:
-
-  - We finally added a **[CoC](CODE_OF_CONDUCT.md)**
-  - Windows compatibility has improved massively
+# 2.0.1
+
+## Fixes
+
+- Fix broken css linking in production build
+
+# 2.0.0
+
+## Breaking Changes
+
+- drop redux
+- remove counter example app
+- simplify directory structure
+- move `dll` dir to `.erb` dir
+- fix icon/font import paths
+- migrate to `react-refresh` from `react-hot-loader`
+- migrate to webpack@5
+- migrate to electron@11
+- remove e2e tests and testcafe integration
+- rename `app` dir to more conventional `src` dir
+- rename `resources` dir to `assets`
+- simplify npm scripts
+- drop stylelint
+- simplify styling of boilerplate app
+- remove `START_HOT` env variable
+- notarize support
+- landing page boilerplate
+- docs updates
+- restore removed debugging support
+
+# 1.4.0
+
+- Migrate to `eslint-config-erb@2`
+- Rename `dev` npm script to `start`
+- GitHub Actions: only publish GitHub releases when on master branch
+
+# 1.3.1
+
+- Fix sass building bug ([#2540](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2540))
+- Fix CI bug related to E2E tests and network timeouts
+- Move automated dependency PRs to `next` ([#2554](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2554))
+- Bump dependencies to patch semver
+
+# 1.3.0
+
+- Fixes E2E tests ([#2516](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2516))
+- Fixes preload entrypoint ([#2503](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2503))
+- Downgrade to `electron@8`
+- Bump dependencies to latest semver
+
+# 1.2.0
+
+- Migrate to redux toolkit
+- Lazy load routes with react suspense
+- Drop support for azure-pipelines and use only github actions
+- Bump all deps to latest semver
+- Remove `test-e2e` script from tests (blocked on release of https://github.com/DevExpress/testcafe-browser-provider-electron/pull/65)
+- Swap `typed-css-modules-webpack-plugin` for `typings-for-css-modules-loader`
+- Use latest version of `eslint-config-erb`
+- Remove unnecessary file extensions from ts exclude
+- Add experimental support for vscode debugging
+- Revert https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2365 as default for users, provide as opt in option
+
+# 1.1.0
+
+- Fix #2402
+- Simplify configs (https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2406)
+
+# 1.0.0
+
+- Migrate to TypeScript from Flow ([#2363](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2363))
+- Use browserslist for `@babel/preset-env` targets ([#2368](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2368))
+- Use preload script, disable `nodeIntegration` in renderer process for [improved security](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content) ([#2365](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2365))
+- Add support for azure pipelines ([#2369](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2369))
+- Disable sourcemaps in production
+
+# 0.18.1 (2019.12.12)
+
+- Fix HMR env bug ([#2343](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2343))
+- Bump all deps to latest semver
+- Bump to `electron@7`
+
+# 0.18.0 (2019.11.19)
+
+- Bump electron to `electron@6` (`electron@7` introduces breaking changes to testcafe end to end tests)
+- Revert back to [two `package.json` structure](https://www.electron.build/tutorials/two-package-structure)
+- Bump all deps to latest semver
+
+# 0.17.1 (2018.11.20)
+
+- Fix `yarn test-e2e` and testcafe for single package.json structure
+- Fixes incorrect path in `yarn start` script
+- Bumped deps
+- Bump g++ in travis
+- Change clone arguments to clone only master
+- Change babel config to target current electron version
+
+For full change list, see https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/2021
+
+# 0.17.0 (2018.10.30)
+
+- upgraded to `babel@7` (thanks to @vikr01 🎉🎉🎉)
+- migrated from [two `package.json` structure](https://www.electron.build/tutorials/two-package-structure) (thanks to @HyperSprite!)
+- initial auto update support (experimental)
+- migrate from greenkeeper to [renovate](https://renovatebot.com)
+- added issue template
+- use `babel-preset-env` to target current electron version
+- add [opencollective](https://opencollective.com/electron-react-boilerplate-594) banner message display in postinstall script (help support ERB 🙏)
+- fix failing ci issues
+
+# 0.16.0 (2018.10.3)
+
+- removed unused dependencies
+- migrate from `react-redux-router` to `connect-react-router`
+- move webpack configs to `./webpack` dir
+- use `g++` on travis when testing linux
+- migrate from `spectron` to `testcafe` for e2e tests
+- add linting support for config styles
+- changed stylelint config
+- temporarily disabled flow in appveyor to make ci pass
+- added necessary infra to publish releases from ci
+
+# 0.15.0 (2018.8.25)
+
+- Performance: cache webpack uglify results
+- Feature: add start minimized feature
+- Feature: lint and fix styles with prettier and stylelint
+- Feature: add greenkeeper support
+
+# 0.14.0 (2018.5.24)
+
+- Improved CI timings
+- Migrated README commands to yarn from npm
+- Improved vscode config
+- Updated all dependencies to latest semver
+- Fix `electron-rebuild` script bug
+- Migrated to `mini-css-extract-plugin` from `extract-text-plugin`
+- Added `optimize-css-assets-webpack-plugin`
+- Run `prettier` on json, css, scss, and more filetypes
+
+# 0.13.3 (2018.5.24)
+
+- Add git precommit hook, when git commit will use `prettier` to format git add code
+- Add format code function in `lint-fix` npm script which can use `prettier` to format project js code
+
+# 0.13.2 (2018.1.31)
+
+- Hot Module Reload (HMR) fixes
+- Bumped all dependencies to latest semver
+- Prevent error propagation of `CheckNativeDeps` script
+
+# 0.13.1 (2018.1.13)
+
+- Hot Module Reload (HMR) fixes
+- Bumped all dependencies to latest semver
+- Fixed electron-rebuild script
+- Fixed tests scripts to run on all platforms
+- Skip redux logs in console in test ENV
+
+# 0.13.0 (2018.1.6)
+
+#### Additions
+
+- Add native dependencies check on postinstall
+- Updated all dependencies to latest semver
+
+# 0.12.0 (2017.7.8)
+
+#### Misc
+
+- Removed `babel-polyfill`
+- Renamed and alphabetized npm scripts
+
+#### Breaking
+
+- Changed node dev `__dirname` and `__filename` to node built in fn's (https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/1035)
+- Renamed `src/bundle.js` to `src/renderer.prod.js` for consistency
+- Renamed `dll/vendor.js` to `dll/renderer.dev.dll.js` for consistency
+
+#### Additions
+
+- Enable node_modules cache on CI
+
+# 0.11.2 (2017.5.1)
+
+Yay! Another patch release. This release mostly includes refactorings and router bug fixes. Huge thanks to @anthonyraymond!
+
+⚠️ Windows electron builds are failing because of [this issue](https://github.com/electron/electron/issues/9321). This is not an issue with the boilerplate ⚠️
+
+#### Breaking
+
+- **Renamed `./src/main.development.js` => `./src/main.{dev,prod}.js`:** [#963](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/963)
+
+#### Fixes
+
+- **Fixed reloading when not on `/` path:** [#958](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/958) [#949](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/949)
+
+#### Additions
+
+- **Added support for stylefmt:** [#960](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/960)
+
+# 0.11.1 (2017.4.23)
+
+You can now debug the production build with devtools like so:
+
+```
+DEBUG_PROD=true npm run package
+```
+
+🎉🎉🎉
+
+#### Additions
+
+- **Added support for debugging production build:** [#fab245a](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/941/commits/fab245a077d02a09630f74270806c0c534a4ff95)
+
+#### Bug Fixes
+
+- **Fixed bug related to importing native dependencies:** [#933](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/933)
+
+#### Improvements
+
+- **Updated all deps to latest semver**
+
+# 0.11.0 (2017.4.19)
+
+Here's the most notable changes since `v0.10.0`. Its been about a year since a release has been pushed. Expect a new release to be published every 3-4 weeks.
+
+#### Breaking Changes
+
+- **Dropped support for node < 6**
+- **Refactored webpack config files**
+- **Migrate to two-package.json project structure**
+- **Updated all devDeps to latest semver**
+- **Migrated to Jest:** [#768](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/768)
+- **Migrated to `react-router@4`**
+- **Migrated to `electron-builder@4`**
+- **Migrated to `webpack@2`**
+- **Migrated to `react-hot-loader@3`**
+- **Changed default live reload server PORT to `1212` from `3000`**
+
+#### Additions
+
+- **Added support for Yarn:** [#451](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/451)
+- **Added support for Flow:** [#425](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/425)
+- **Added support for stylelint:** [#911](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/911)
+- **Added support for electron-builder:** [#876](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/876)
+- **Added optional support for SASS:** [#880](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/880)
+- **Added support for eslint-plugin-flowtype:** [#911](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/911)
+- **Added support for appveyor:** [#280](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/280)
+- **Added support for webpack dlls:** [#860](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/860)
+- **Route based code splitting:** [#884](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/884)
+- **Added support for Webpack Bundle Analyzer:** [#922](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/922)
+
+#### Improvements
+
+- **Parallelize renderer and main build processes when running `npm run build`**
+- **Dynamically generate electron app menu**
+- **Improved vscode integration:** [#856](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/856)
+
+#### Bug Fixes
+
+- **Fixed hot module replacement race condition bug:** [#917](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/917) [#920](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/920)
+
+# 0.10.0 (2016.4.18)
+
+#### Improvements
+
+- **Use Babel in main process with Webpack build:** [#201](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/201)
+- **Change targets to built-in support by webpack:** [#197](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/197)
+- **use es2015 syntax for webpack configs:** [#195](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/195)
+- **Open application when webcontent is loaded:** [#192](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/192)
+- **Upgraded dependencies**
+
+#### Bug fixed
+
+- **Fix `npm list electron-prebuilt` in package.js:** [#188](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/188)
+
+# 0.9.0 (2016.3.23)
+
+#### Improvements
+
+- **Added [redux-logger](https://github.com/fcomb/redux-logger)**
+- **Upgraded [react-router-redux](https://github.com/reactjs/react-router-redux) to v4**
+- **Upgraded dependencies**
+- **Added `npm run dev` command:** [#162](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/162)
+- **electron to v0.37.2**
+
+#### Breaking Changes
+
+- **css module as default:** [#154](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/154).
+- **set default NODE_ENV to production:** [#140](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/140)
+
+# 0.8.0 (2016.2.17)
+
+#### Bug fixed
+
+- **Fix lint errors**
+- **Fix Webpack publicPath for production builds**: [#119](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/119).
+- **package script now chooses correct OS icon extension**
+
+#### Improvements
+
+- **babel 6**
+- **Upgrade Dependencies**
+- **Enable CSS source maps**
+- **Add json-loader**: [#128](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/128).
+- **react-router 2.0 and react-router-redux 3.0**
+
+# 0.7.1 (2015.12.27)
+
+#### Bug fixed
+
+- **Fixed npm script on windows 10:** [#103](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/103).
+- **history and react-router version bump**: [#109](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/109), [#110](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/110).
+
+#### Improvements
+
+- **electron 0.36**
+
+# 0.7.0 (2015.12.16)
+
+#### Bug fixed
+
+- **Fixed process.env.NODE_ENV variable in webpack:** [#74](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/74).
+- **add missing object-assign**: [#76](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/76).
+- **packaging in npm@3:** [#77](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/77).
+- **compatibility in windows:** [#100](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/100).
+- **disable chrome debugger in production env:** [#102](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/102).
+
+#### Improvements
+
+- **redux**
+- **css-modules**
+- **upgrade to react-router 1.x**
+- **unit tests**
+- **e2e tests**
+- **travis-ci**
+- **upgrade to electron 0.35.x**
+- **use es2015**
+- **check dev engine for node and npm**
+
+# 0.6.5 (2015.11.7)
+
+#### Improvements
+
+- **Bump style-loader to 0.13**
+- **Bump css-loader to 0.22**
+
+# 0.6.4 (2015.10.27)
+
+#### Improvements
+
+- **Bump electron-debug to 0.3**
+
+# 0.6.3 (2015.10.26)
+
+#### Improvements
+
+- **Initialize ExtractTextPlugin once:** [#64](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/64).
+
+# 0.6.2 (2015.10.18)
+
+#### Bug fixed
+
+- **Babel plugins production env not be set properly:** [#57](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/57).
+
+# 0.6.1 (2015.10.17)
+
+#### Improvements
+
+- **Bump electron to v0.34.0**
+
+# 0.6.0 (2015.10.16)
+
+#### Breaking Changes
+
+- **From react-hot-loader to react-transform**
+
+# 0.5.2 (2015.10.15)
+
+#### Improvements
+
+- **Run tests with babel-register:** [#29](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/29).
+
+# 0.5.1 (2015.10.12)
+
+#### Bug fixed
+
+- **Fix #51:** use `path.join(__dirname` instead of `./`.
+
+# 0.5.0 (2015.10.11)
+
+#### Improvements
+
+- **Simplify webpack config** see [#50](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/50).
+
+#### Breaking Changes
+
+- **webpack configs**
+- **port changed:** changed default port from 2992 to 3000.
+- **npm scripts:** remove `start-dev` and `dev-server`. rename `hot-dev-server` to `hot-server`.
+
+# 0.4.3 (2015.9.22)
+
+#### Bug fixed
+
+- **Fix #45 zeromq crash:** bump version of `electron-prebuilt`.
+
+# 0.4.2 (2015.9.15)
+
+#### Bug fixed
+
+- **run start-hot breaks chrome refresh(CTRL+R) (#42)**: bump `electron-debug` to `0.2.1`
+
+# 0.4.1 (2015.9.11)
+
+#### Improvements
+
+- **use electron-prebuilt version for packaging (#33)**
+
+# 0.4.0 (2015.9.5)
+
+#### Improvements
+
+- **update dependencies**
+
+# 0.3.0 (2015.8.31)
+
+#### Improvements
+
+- **eslint-config-airbnb**
+
+# 0.2.10 (2015.8.27)
+
+#### Features
+
+- **custom placeholder icon**
+
+#### Improvements
+
+- **electron-renderer as target:** via [webpack-target-electron-renderer](https://github.com/chentsulin/webpack-target-electron-renderer)
+
+# 0.2.9 (2015.8.18)
+
+#### Bug fixed
+
+- **Fix hot-reload**
+
+# 0.2.8 (2015.8.13)
+
+#### Improvements
+
+- **bump electron-debug**
+- **babelrc**
+- **organize webpack scripts**
+
+# 0.2.7 (2015.7.9)
+
+#### Bug fixed
+
+- **defaultProps:** fix typos.
+
+# 0.2.6 (2015.7.3)
+
+#### Features
+
+- **menu**
+
+#### Bug fixed
+
+- **package.js:** include webpack build.
+
+# 0.2.5 (2015.7.1)
+
+#### Features
+
+- **NPM Script:** support multi-platform
+- **package:** `--all` option
+
+# 0.2.4 (2015.6.9)
+
+#### Bug fixed
+
+- **Eslint:** typo, [#17](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/17) and improve `.eslintrc`
+
+# 0.2.3 (2015.6.3)
+
+#### Features
+
+- **Package Version:** use latest release electron version as default
+- **Ignore Large peerDependencies**
+
+#### Bug fixed
+
+- **Npm Script:** typo, [#6](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/6)
+- **Missing css:** [#7](https://github.com/electron-react-boilerplate/electron-react-boilerplate/pull/7)
+
+# 0.2.2 (2015.6.2)
+
+#### Features
+
+- **electron-debug**
+
+#### Bug fixed
+
+- **Webpack:** add `.json` and `.node` to extensions for imitating node require.
+- **Webpack:** set `node_modules` to externals for native module support.
+
+# 0.2.1 (2015.5.30)
+
+#### Bug fixed
+
+- **Webpack:** #1, change build target to `atom`.
+
+# 0.2.0 (2015.5.30)
+
+#### Features
+
+- **Ignore:** `test`, `tools`, `release` folder and devDependencies in `package.json`.
+- **Support asar**
+- **Support icon**
+
+# 0.1.0 (2015.5.27)
+
+#### Features
+
+- **Webpack:** babel, react-hot, ...
+- **Flux:** actions, api, components, containers, stores..
+- **Package:** darwin (osx), linux and win32 (windows) platform.

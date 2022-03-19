@@ -1,167 +1,259 @@
 {
-  "name": "react-boilerplate",
-  "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
-  },
-  "engines": {
-    "npm": ">=5",
-    "node": ">=8.15.1"
-  },
-  "author": "Max Stoiber",
-  "license": "MIT",
+  "name": "electron-react-boilerplate",
+  "description": "A foundation for scalable desktop apps",
   "scripts": {
-    "analyze:clean": "rimraf stats.json",
-    "preanalyze": "npm run analyze:clean",
-    "analyze": "node ./internals/scripts/analyze.js",
-    "extract-intl": "node ./internals/scripts/extract-intl.js",
-    "npmcheckversion": "node ./internals/scripts/npmcheckversion.js",
-    "preinstall": "npm run npmcheckversion",
-    "prebuild": "npm run build:clean",
-    "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
-    "build:clean": "rimraf ./build",
-    "start": "cross-env NODE_ENV=development node server",
-    "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
-    "start:production": "npm run test && npm run build && npm run start:prod",
-    "start:prod": "cross-env NODE_ENV=production node server",
-    "presetup": "npm i chalk shelljs",
-    "setup": "node ./internals/scripts/setup.js",
-    "clean": "shjs ./internals/scripts/clean.js",
-    "clean:all": "npm run analyze:clean && npm run test:clean && npm run build:clean",
-    "generate": "plop --plopfile internals/generators/index.js",
-    "lint": "npm run lint:js && npm run lint:css",
-    "lint:css": "stylelint app/**/*.js",
-    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
-    "lint:eslint:fix": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts --fix",
-    "lint:js": "npm run lint:eslint -- . ",
-    "lint:staged": "lint-staged",
-    "pretest": "npm run test:clean && npm run lint",
-    "test:clean": "rimraf ./coverage",
-    "test": "cross-env NODE_ENV=test jest --coverage",
-    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "prettify": "prettier --write"
+    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
+    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
+    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
+    "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
+    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
+    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
+    "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
+    "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+    "test": "jest",
+    "prepare": "husky install"
   },
-  "browserslist": [
-    "last 2 versions",
-    "> 1%",
-    "IE 10"
-  ],
   "lint-staged": {
-    "*.js": [
-      "npm run lint:eslint:fix",
-      "git add --force"
+    "*.{js,jsx,ts,tsx}": [
+      "cross-env NODE_ENV=development eslint --cache"
     ],
-    "*.json": [
-      "prettier --write",
-      "git add --force"
+    "*.json,.{eslintrc,prettierrc}": [
+      "prettier --ignore-path .eslintignore --parser json --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
     ]
   },
-  "pre-commit": "lint:staged",
-  "resolutions": {
-    "babel-core": "7.0.0-bridge.0"
+  "build": {
+    "productName": "ElectronReact",
+    "appId": "org.erb.ElectronReact",
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
+    "files": [
+      "dist",
+      "node_modules",
+      "package.json"
+    ],
+    "afterSign": ".erb/scripts/notarize.js",
+    "mac": {
+      "target": {
+        "target": "default",
+        "arch": [
+          "arm64",
+          "x64"
+        ]
+      },
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Development"
+    },
+    "directories": {
+      "app": "release/app",
+      "buildResources": "assets",
+      "output": "release/build"
+    },
+    "extraResources": [
+      "./assets/**"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "electron-react-boilerplate",
+      "repo": "electron-react-boilerplate"
+    }
   },
-  "dependencies": {
-    "@babel/polyfill": "7.4.3",
-    "chalk": "2.4.2",
-    "compression": "1.7.4",
-    "connected-react-router": "6.4.0",
-    "cross-env": "5.2.0",
-    "express": "4.16.4",
-    "fontfaceobserver": "2.1.0",
-    "history": "4.9.0",
-    "hoist-non-react-statics": "3.3.0",
-    "immer": "3.0.0",
-    "intl": "1.2.5",
-    "invariant": "2.2.4",
-    "ip": "1.1.5",
-    "lodash": "4.17.11",
-    "minimist": "1.2.0",
-    "prop-types": "15.7.2",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-helmet": "6.0.0-beta",
-    "react-intl": "2.8.0",
-    "react-redux": "7.0.2",
-    "react-router-dom": "5.0.0",
-    "redux": "4.0.1",
-    "redux-saga": "1.0.2",
-    "reselect": "4.0.0",
-    "sanitize.css": "8.0.0",
-    "styled-components": "4.2.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+  },
+  "author": {
+    "name": "Electron React Boilerplate Maintainers",
+    "email": "electronreactboilerplate@gmail.com",
+    "url": "https://electron-react-boilerplate.js.org"
+  },
+  "contributors": [
+    {
+      "name": "Amila Welihinda",
+      "email": "amilajack@gmail.com",
+      "url": "https://github.com/amilajack"
+    },
+    {
+      "name": "John Tran",
+      "email": "jptran318@gmail.com",
+      "url": "https://github.com/jooohhn"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+  },
+  "keywords": [
+    "electron",
+    "boilerplate",
+    "react",
+    "typescript",
+    "ts",
+    "sass",
+    "webpack",
+    "hot",
+    "reload"
+  ],
+  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "jest": {
+    "testURL": "http://localhost/",
+    "testEnvironment": "jsdom",
+    "transform": {
+      "\\.(ts|tsx|js|jsx)$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "release/app/node_modules"
+    ],
+    "testPathIgnorePatterns": [
+      "release/app/dist"
+    ],
+    "setupFiles": [
+      "./.erb/scripts/check-build-exists.ts"
+    ]
   },
   "devDependencies": {
-    "@babel/cli": "7.4.3",
-    "@babel/core": "7.4.3",
-    "@babel/plugin-proposal-class-properties": "7.4.0",
-    "@babel/plugin-syntax-dynamic-import": "7.2.0",
-    "@babel/plugin-transform-modules-commonjs": "7.4.3",
-    "@babel/plugin-transform-react-constant-elements": "7.2.0",
-    "@babel/plugin-transform-react-inline-elements": "7.2.0",
-    "@babel/preset-env": "7.4.3",
-    "@babel/preset-react": "7.0.0",
-    "@babel/register": "7.4.0",
-    "add-asset-html-webpack-plugin": "3.1.3",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "10.0.1",
-    "babel-loader": "8.0.5",
-    "babel-plugin-dynamic-import-node": "2.2.0",
-    "babel-plugin-lodash": "3.3.4",
-    "babel-plugin-react-intl": "3.0.1",
-    "babel-plugin-styled-components": "1.10.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "circular-dependency-plugin": "5.0.2",
-    "compare-versions": "3.4.0",
-    "compression-webpack-plugin": "2.0.0",
-    "coveralls": "3.0.3",
-    "css-loader": "2.1.1",
-    "eslint": "5.16.0",
-    "eslint-config-airbnb": "17.1.0",
-    "eslint-config-airbnb-base": "13.1.0",
-    "eslint-config-prettier": "4.1.0",
-    "eslint-import-resolver-webpack": "0.11.1",
-    "eslint-plugin-import": "2.17.2",
-    "eslint-plugin-jsx-a11y": "6.2.1",
-    "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-react": "7.12.4",
-    "eslint-plugin-redux-saga": "1.0.0",
-    "eslint-plugin-react-hooks": "1.6.0",
-    "file-loader": "3.0.1",
-    "html-loader": "0.5.5",
-    "html-webpack-plugin": "3.2.0",
-    "image-webpack-loader": "4.6.0",
-    "imports-loader": "0.8.0",
-    "jest-cli": "24.7.1",
-    "jest-dom": "3.1.3",
-    "jest-styled-components": "6.3.1",
-    "lint-staged": "8.1.5",
-    "ngrok": "3.1.1",
-    "node-plop": "0.18.0",
-    "null-loader": "0.1.1",
-    "offline-plugin": "5.0.6",
-    "plop": "2.3.0",
-    "pre-commit": "1.2.2",
-    "prettier": "1.17.0",
-    "react-app-polyfill": "0.2.2",
-    "react-test-renderer": "16.8.6",
-    "react-testing-library": "6.1.2",
-    "rimraf": "2.6.3",
-    "shelljs": "0.8.3",
-    "style-loader": "0.23.1",
-    "stylelint": "10.0.1",
-    "stylelint-config-recommended": "2.2.0",
-    "stylelint-config-styled-components": "0.1.1",
-    "stylelint-processor-styled-components": "1.6.0",
-    "svg-url-loader": "2.3.2",
-    "terser-webpack-plugin": "1.2.3",
-    "url-loader": "1.1.2",
-    "webpack": "4.30.0",
-    "webpack-cli": "3.3.0",
-    "webpack-dev-middleware": "3.6.2",
-    "webpack-hot-middleware": "2.24.3",
-    "webpack-pwa-manifest": "4.0.0",
-    "whatwg-fetch": "3.0.0"
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.0.3",
+    "@types/node": "17.0.5",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-test-renderer": "^17.0.1",
+    "@types/terser-webpack-plugin": "^5.0.4",
+    "@types/webpack-env": "^1.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "browserslist-config-erb": "^0.0.3",
+    "chalk": "^4.1.2",
+    "concurrently": "^6.5.1",
+    "core-js": "^3.20.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.3.1",
+    "detect-port": "^1.3.0",
+    "electron": "^16.0.5",
+    "electron-builder": "22.13.1",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-notarize": "^1.1.1",
+    "electron-rebuild": "^3.2.5",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-erb": "^4.0.3",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-import-resolver-webpack": "^0.13.2",
+    "eslint-plugin-compat": "^4.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.3.2",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.5",
+    "lint-staged": "^12.1.4",
+    "mini-css-extract-plugin": "^2.4.5",
+    "opencollective-postinstall": "^2.0.3",
+    "prettier": "^2.5.1",
+    "react-refresh": "^0.11.0",
+    "react-refresh-typescript": "^2.0.3",
+    "react-test-renderer": "^17.0.2",
+    "rimraf": "^3.0.2",
+    "sass": "^1.45.1",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.0",
+    "ts-jest": "^27.1.2",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.65.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "electron-debug": "^3.2.0",
+    "electron-log": "^4.4.6",
+    "electron-updater": "^4.6.5",
+    "history": "^5.3.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1"
+  },
+  "devEngines": {
+    "node": ">=14.x",
+    "npm": ">=7.x"
+  },
+  "collective": {
+    "url": "https://opencollective.com/electron-react-boilerplate-594"
+  },
+  "browserslist": [],
+  "prettier": {
+    "overrides": [
+      {
+        "files": [
+          ".prettierrc",
+          ".eslintrc"
+        ],
+        "options": {
+          "parser": "json"
+        }
+      }
+    ],
+    "singleQuote": true
   }
 }
