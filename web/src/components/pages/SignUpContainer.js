@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import SignUpForm from "./SignUp.js";
 import { Link } from 'react-router-dom';
 
-import { db } from '../..';
-
-
 const axios = require("axios");
 const FormValidators = require("./validate");
 const validateSignUpForm = FormValidators.validateSignUpForm;
@@ -82,11 +79,11 @@ class SignUpContainer extends Component {
     console.log(params);
 
     // ADD TO DB!
-    db.collection('artist').add({
-        name: params.username,
-        email: params.email,
-        password: params.password
-    })
+    // db.collection('artist').add({
+    //     name: params.username,
+    //     email: params.email,
+    //     password: params.password
+    // })
 
     // console.log(db.collection('artist')
     // .get()

@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import SignInForm from "./SignIn.js";
 import { Link, Redirect } from 'react-router-dom';
 
-import { db } from '../..';
-
-
 const axios = require("axios");
 const FormValidators = require("./validate");
 const validateSignUpForm = FormValidators.validateSignUpForm;
@@ -120,27 +117,27 @@ class SignInContainer extends Component {
     // let isLoggedIn = false;
 
     console.log("1");
-    console.log(db.collection(params.userType)
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            let userData = doc.data();
-            let email = userData.email;
-            let password = userData.password;
-            if (params.email === email && params.password === password) {
-              console.log("DA");
-              // isLoggedIn = true;
-              // this.isLoggedIn = true;
-              localStorage.setItem("email", params.email);
-              localStorage.setItem("userType", params.userType);
-              localStorage.setItem("isLoggedIn", true);
-              // this.handleLogin(user);
-            }
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    }));
+    // console.log(db.collection(params.userType)
+    // .get()
+    // .then(function(querySnapshot) {
+    //     querySnapshot.forEach(function(doc) {
+    //         let userData = doc.data();
+    //         let email = userData.email;
+    //         let password = userData.password;
+    //         if (params.email === email && params.password === password) {
+    //           console.log("DA");
+    //           // isLoggedIn = true;
+    //           // this.isLoggedIn = true;
+    //           localStorage.setItem("email", params.email);
+    //           localStorage.setItem("userType", params.userType);
+    //           localStorage.setItem("isLoggedIn", true);
+    //           // this.handleLogin(user);
+    //         }
+    //     });
+    // })
+    // .catch(function(error) {
+    //     console.log("Error getting documents: ", error);
+    // }));
     this.forceUpdate();
 
   }
