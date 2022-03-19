@@ -1,0 +1,326 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+// @import 'bootstrap/dist/css/bootstrap.min.css';
+
+$dark-color: #2F4858;
+$dark-color-2: #3b5a6d;
+$light-color: #D7F0EB;
+$accent-color: #348C80;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* font-family: 'PT Sans', sans-serif; */
+  font-family: Georgia, serif;
+  scroll-behavior: smooth;
+}
+
+.home,
+.services,
+.products,
+.sign-up {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.home {
+  background-image: url('../public/images/img-2.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 100px;
+}
+
+.services {
+  background-image: url('../public/images/img-1.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 100px;
+}
+
+.products {
+  background-image: url('../public/images/img-1.jpg');
+  background-position: center;
+  background-size: fill;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 100px;
+}
+
+.sign-up {
+  background-image: url('../public/images/img-1.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 100px;
+}
+
+
+form {
+  width: 100%;
+}
+
+.loginBox {
+  width: 50%;
+  text-align: center;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 20%);
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.4);
+}
+
+.signUpSubmit {
+  margin: 25px 0 15px 0;
+}
+
+.pwStrRow {
+  width: 63%;
+  text-align: left;
+  margin: auto;
+  padding: 0;
+  font-size: 12px;
+}
+
+.pwStrWeak {
+  display: inline-block;
+  position: relative;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  color: gray;
+}
+
+.pwStrStrong {
+  display: inline-block;
+  position: relative;
+  left: 77%;
+  padding: 0;
+  margin: 0;
+  color: gray;
+}
+
+@media screen and (max-width: 550px) {
+  .loginBox {
+    width: 85%;
+  }
+}
+.events-list, .artists-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.artists-list {
+  height: 80vh;
+  overflow: auto;
+  -webkit-box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.42); 
+  box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.42);
+  margin: 8px;
+}
+
+.event-item, .artist-item {
+  background-color: $dark-color-2;
+  margin: 8px;
+  -webkit-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.42); 
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.42);
+  height: 400px;
+  border: 2px solid $accent-color;
+  border-radius: 30px;
+  overflow: auto;
+}
+
+.event-item-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $dark-color-2;
+  margin: 8px;
+  -webkit-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.42); 
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.42);
+  height: 400px;
+  border: 2px solid $accent-color;
+  border-radius: 30px;
+  overflow: auto;
+}
+
+.card {
+  background-color: $dark-color-2;
+}
+
+.artist-item {
+  background-color: #4056a1;
+  color: white;
+}
+
+.event-item-card, .artist-item-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+  padding: 10px;
+}
+
+.event-item-title, .event-item-location, .event-item-date, .event-item-details, .artist-item-name, .artist-item-type, .artist-item-skills, .artist-item-description {
+  margin: 2px;
+  color: $light-color;
+}
+
+.event-item-title, .artist-item-name {
+  font-size: 20px;
+}
+
+.event-item-details {
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+.event-item-button, .artist-item-button {
+  margin-top: 5px;
+  border-radius: 30px;
+}
+
+.artist-item-accept-button {
+  background-color: #23b973;
+}
+
+.artist-item-decline-button {
+  background-color: #ffc107;
+}
+
+.artist-profile-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.artists-applicants-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-applicant {
+  display: grid;
+  grid-template-columns: 25% 25% 30% 20%;
+  max-width: 400px !important;
+  align-items: center;
+  text-decoration: none;
+  list-style: none;
+  background-color: $dark-color-2;
+  border-radius: 50px;
+  color: $light-color;
+  width: 100%;
+  margin: 5px 0 5px 0;
+}
+
+.artist-applicant-name, .artist-applicant-type {
+  padding: 10px;
+}
+
+.artist-applicant-button {
+  height: 100px;
+  background-color: $light-color;
+  border-radius: 0 50px 50px 0;
+}
+
+.artist-applicant-button > a{
+  height: 100%;
+  padding-top: 90%;
+}
+
+#view-applicants-button {
+  text-decoration: none;
+  font-size: 32px;
+  margin: 8px;
+  color: $light-color;
+}
+
+.event-item-details-link, .artist-item-details-link {
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+.organizer-and-applicants-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-event-form {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 25% 25% 25% 25%;
+  max-width: 800px;
+  // flex-direction: column;
+  // align-items: center;
+  // margin: 16px;
+}
+
+.create-event-form-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: $dark-color-2;
+  // width: 20vw;
+  margin: 16px;
+  padding: 8px;
+}
+
+.create-event-title {
+  color: $accent-color;
+  margin: 16px;
+}
+
+.create-event-form-input-label {
+  width: 25%;
+  color: $light-color;
+}
+
+.create-event-form-input-field {
+  width: 75%;
+  height: 50%;
+}
+
+.create-event-form-checkbox {
+  margin: 4px;
+}
+
+.create-event-form-input-submit-button {
+  background-color: $accent-color;
+  color: $light-color;
+  margin: 16px;
+  padding: 8px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+}
+
+.apply-filters-button {
+  background-color: $accent-color;
+  color: white;
+}
