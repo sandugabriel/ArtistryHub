@@ -42,7 +42,7 @@ function EventDetails() {
     <>
       <div className='organizer-and-applicants-container'>
         <Card style={{ width: '18rem' }} className='event-item-details-container' style={{ height: '80vh', maxWidth: '100vh' }}>
-          <Card.Img variant="top" src="/images/img-2.jpg" style={{ width: '50%' }}/>
+          <Card.Img variant="top" src="/images/party.jpg" style={{ width: '50%' }}/>
           <Card.Body className='event-item-card'>
             <Card.Title className='event-item-title'>
               {ev.name}

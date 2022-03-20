@@ -12,7 +12,7 @@ function Events() {
   const listEvents = myEvents.map((ev) => 
     <li key={ev.id} className='event-item'>
       <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src="/images/img-2.jpg" style={{ width: '100%' }}/>
+        <Card.Img variant="top" src="/images/party.jpg" style={{ width: '100%' }}/>
         <Card.Body className='event-item-card'>
           <Card.Title className='event-item-title'>
             {ev.name}
