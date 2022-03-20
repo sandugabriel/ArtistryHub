@@ -17,7 +17,7 @@ cur.execute('CREATE TABLE artists (id serial PRIMARY KEY,'
                                  'username varchar (100) NOT NULL,'
                                  'email varchar (100) NOT NULL,'
                                  'password varchar (100) NOT NULL,'
-                                 'profile_picture bytea',
+                                 'profile_picture bytea,'
                                  'location varchar (100) NOT NULL,'
                                  'artist_type varchar (100) NOT NULL,'
                                  'booked_events_ids varchar(500),'
@@ -52,8 +52,8 @@ cur.execute('CREATE TABLE events (id serial PRIMARY KEY,'
                                  )
 
 # dev
-cur.execute("COPY artists(id, first_name, last_name, username, email, password, location, artist_type) FROM '/Users/gsandu/Downloads/MOCK_DATA.csv DELIMITER ', CSV HEADER;")
-cur.execute("COPY organizers(id, first_name, last_name, username, email, password) FROM '/Users/gsandu/Downloads/buyers.csv DELIMITER ', CSV HEADER;")
+# cur.execute("COPY artists(id, first_name, last_name, username, email, password, location, artist_type) FROM '/Users/gsandu/Downloads/MOCK_DATA.csv DELIMITER ', CSV HEADER;")
+# cur.execute("COPY organizers(id, first_name, last_name, username, email, password) FROM '/Users/gsandu/Downloads/buyers.csv DELIMITER ', CSV HEADER;")
 
 conn.commit()
 

@@ -3,6 +3,7 @@ import profile
 import psycopg2
 from flask import Flask, render_template
 from flask import request
+import sys
 from utils import convert_to_json
 
 
@@ -20,6 +21,17 @@ def get_db_connection():
 def index():
     return '<h1>Salut</h1>'
 
+@app.route('/test')
+def test():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT id, username FROM artists;')
+    # cur.execute('')
+    users = cur.fetchall()
+    cur.close()
+    conn.close()
+    return convert_to_json(users, ['id', 'username'])
+
 @app.route('/getallevents', methods = ['GET','POST'])
 def get_all_events():
     conn = get_db_connection()
@@ -31,49 +43,85 @@ def get_all_events():
     conn.close()
     return convert_to_json(users)
 
-@app.route('/createevent', methods = ['POST'])
+@app.route('/createevent', methods = ['GET','POST'])
 def create_event():
     title = request.args.get("title")
     organizer_id = request.args.get("organizer_id")
-    location = request.args.get("artist_type")
+    artist_type = request.args.get("artist_type")
     description = request.args.get("description")
+    location = request.args.get("location")
     start_date = request.args.get("start_date")
-    end_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
     f = request.files['file'].read()
+    f = psycopg2.Binary(f)
+    out = ['']
 
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f'INSERT INTO events(title, organizer_id, location, artist_type, description, media, start_date, end_date) VALUES ({title}, {organizer_id}, {location}, {description}, {f}, {start_date}, {end_date});')
+        print(f'''INSERT INTO events(title, organizer_id, location, artist_type, description, media, start_date, end_date) VALUES ('{title}', '{organizer_id}', '{location}', '{description}', {f}, {start_date}, {end_date});''')
+        cur.execute(f'''INSERT INTO events(title, organizer_id, location, artist_type, description, media, start_date, end_date) VALUES ('{title}', '{organizer_id}', '{location}', '{artist_type}' , '{description}', {f}, '{start_date}', '{end_date}') RETURNING id;''')
         out = cur.fetchall()
-    except:
-        return 'false'
-    
-    return str(out)
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+    except Exception as e:
+        print(e)
 
-@app.route('/insertartist', methods = ['POST'])
-def insert_artist():
+    return str(out[0])
+    
+
+@app.route('/createartist', methods = ['GET', 'POST'])
+def create_artist():
     first_name = request.args.get("first_name")
     last_name = request.args.get("last_name")
     username = request.args.get("username")
     email = request.args.get("email")
-    profile_picture = request.files['file'].read()
+    # profile_picture = request.files['file'].read()
+    # profile_picture = psycopg2.Binary(profile_picture)
     password = request.args.get("password")
     location = request.args.get("location")
     artist_type = request.args.get("artist_type")
-    phrase = "INSERT INTO artists (first_name, last_name, username, email, password, location, artist_type, profile_picture) VALUES "
-    phrase += first_name + "," + last_name + "," + username + "," + email + "," + password + "," + location + ","
-    phrase += artist_type + profile_picture +";"
+    phrase = f'''INSERT INTO artists (first_name, last_name, username, email, password, location, artist_type) VALUES ('{first_name}' ,  '{last_name}', '{username}' , '{email}' , '{password}' ,  '{location}'  ,'{artist_type}') RETURNING id;'''
+    print(phrase)
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(phrase)
+        # print('muie LA CACAU', file=sys.stderr)
+        out = cur.fetchall()
+        print(out)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(e)
+        return "false"
+    return str(out[0])
+
+@app.route('/createorganizer', methods = ['GET', 'POST'])
+def create_organizer():
+    first_name = request.args.get("first_name")
+    last_name = request.args.get("last_name")
+    username = request.args.get("username")
+    email = request.args.get("email")
+    password = request.args.get("password")
+
+    phrase = f'''INSERT INTO organizers (first_name, last_name, username, email, password) VALUES ('{first_name}' ,  '{last_name}', '{username}' , '{email}' , '{password}') RETURNING id;'''
+
     try:
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute(phrase)
         out = cur.fetchall()
+        print(out)
+        conn.commit()
         cur.close()
         conn.close()
     except:
         return "false"
-    return str(out)
+    return str(out[0])
 
 @app.route('/selecteventsfororg', methods = ['GET', 'POST'])
 def select_events_for_org():
@@ -153,5 +201,38 @@ def selecteventapplicants():
     except:
         return "false"
     return convert_to_json(events_appl, json_names)
+
+@app.route('/validateloginartist', methods = ['GET', 'POST'])
+def validate_login_artist():
+    email = request.args.get("email");
+    password = request.args.get("password")
+    phrase = f"SELECT id, username FROM artists WHERE email='{email}' AND password='{password}'"
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(phrase)
+    events = cur.fetchall()
+    if len(events) < 1:
+        is_logged_in = 'false'
+    else:
+        is_logged_in  = 'true'
+
+    return is_logged_in
+
+
+@app.route('/validateloginorganizer', methods = ['GET', 'POST'])
+def validate_login_organizers():
+    email = request.args.get("email");
+    password = request.args.get("password")
+    phrase = f"SELECT id, username FROM organizers WHERE email='{email}' AND password='{password}'"
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(phrase)
+    events = cur.fetchall()
+    if len(events) < 1:
+        is_logged_in = 'false'
+    else:
+        is_logged_in  = 'true'
+
+    return is_logged_in
 
 app.run(port = 4996)
