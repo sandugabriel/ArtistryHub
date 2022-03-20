@@ -9,7 +9,9 @@ import { db } from '../..';
 import { Link } from 'react-router-dom';
 
 
-let formData = new FormData(); 
+let formData = new FormData();
+
+
 
 const SignInForm = ({
   history,
@@ -36,7 +38,7 @@ const SignInForm = ({
           label="email"
           value={user.email}
           onChange={onChange}
-          // errorText={errors.email}
+          errorText={errors.message != null ? errors.message : null}
         />
         <br />
 
@@ -46,7 +48,7 @@ const SignInForm = ({
           label="password"
           value={user.password}
           onChange={onPwChange}
-          // errorText={errors.password}
+          errorText={errors.message != null ? errors.message : null}
         />
         <br></br>
         <br></br>

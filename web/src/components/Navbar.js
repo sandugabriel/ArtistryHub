@@ -26,29 +26,46 @@ function Navbar() {
 
   return (
     <>
+      { localStorage.isLoggedIn === 'true' ?
       <nav className='navbar'>
         <div className='navbar-container'>
-          <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
+          {localStorage.getItem("userType") === "organizer" ?
+              <Link to='/organizer/home' className='navbar-logo' onClick={closeMobileMenu}>
+                ArtistryHub
+              </Link>
+              :
+              <Link to='/artist/home' className='navbar-logo' onClick={closeMobileMenu}>
+                ArtistryHub
+              </Link>}
+          {/* <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
             ArtistryHub
-          </Link>
+          </Link> */}
           <div className='menu-icon' onClick={handleClick}>
             <i className={click ? 'fa fa-times' : 'fa fa-bars'} />
           </div>
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-            <li className='nav-item'>
+            { localStorage.userType === 'organizer' ? <li className='nav-item'>
               <Link to='/organizer/events/add' className='nav-links' onClick={closeMobileMenu}>
                 Add Event
               </Link>
-            </li>
+            </li> : null}
             <li className='nav-item'>
-              <Link to='/organizer/events' className='nav-links' onClick={closeMobileMenu}>
+              { localStorage.userType === 'organizer' ? <Link to='/organizer/events' className='nav-links' onClick={closeMobileMenu}>
                 My Events
-              </Link>
+              </Link> : <Link to='/artist/events' className='nav-links' onClick={closeMobileMenu}>
+                My Events
+              </Link> }
             </li>
             <li className='nav-item'>
-              <Link to='/' className='nav-links' onClick={closeMobileMenu}>
-                Home
-              </Link>
+              {localStorage.getItem("userType") === "organizer" ?
+                <Link to='/organizer/home' className='nav-links' onClick={closeMobileMenu}>
+                  Home
+                </Link>
+                :
+                <Link to='/artist/home' className='nav-links' onClick={closeMobileMenu}>
+                  Home
+                </Link>
+              }
             </li>
             <li className='nav-item'>
               <Link
@@ -91,13 +108,67 @@ function Navbar() {
           {console.log("navbar: is logged in? ")}
           {console.log(localStorage.getItem("isLoggedIn") === "true")}
           {button && (localStorage.getItem("isLoggedIn") === "true" ? false : true) && <Link to='/sign-in'><Button buttonStyle='btn--outline'>Sign in</Button></Link>}
-          {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) && 
+          {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) &&
             <Link to={"/" + localStorage.getItem("userType")+"/home"}>
               <Button buttonStyle='btn--outline'>{localStorage.getItem("email") + " - " + localStorage.getItem("userType")}</Button>
             </Link>}
-          {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) && <Link to='/'><Button buttonStyle='btn--outline'>Sign out</Button></Link>}
+          {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) && <Link to='/'><Button onClick = {handleSignOut => {
+            window.location.reload();
+            window.location.replace("/");
+            localStorage.setItem('isLoggedIn', 'false');
+            localStorage.setItem('userType', 'false');
+            localStorage.setItem('username', 'false');
+          }} buttonStyle='btn--outline'>Sign out</Button></Link>}
+        </div>
+      </nav> :
+
+      <nav className='navbar'>
+      <div className='navbar-container'>
+        <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
+          ArtistryHub
+        </Link>
+        <div className='menu-icon' onClick={handleClick}>
+          <i className={click ? 'fa fa-times' : 'fa fa-bars'} />
+        </div>
+        <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+
+          <li>
+            <Link
+              to='/sign-in'
+              className='nav-links-mobile'
+              onClick={closeMobileMenu}
+            >
+              Sign in
+            </Link>
+          </li>
+          <li>
+            <Link
+              to='/sign-up'
+              className='nav-links-mobile'
+              onClick={closeMobileMenu}
+            >
+              Sign Up
+            </Link>
+          </li>
+        </ul>
+        {/* {button && <Button buttonStyle='btn--outline'>Sign up</Button>} */}
+        {console.log("navbar: is logged in? ")}
+        {console.log(localStorage.getItem("isLoggedIn") === "true")}
+        {button && (localStorage.getItem("isLoggedIn") === "true" ? false : true) && <Link to='/sign-in'><Button buttonStyle='btn--outline'>Sign in</Button></Link>}
+        {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) &&
+          <Link to={"/" + localStorage.getItem("userType")+"/home"}>
+            <Button buttonStyle='btn--outline'>{localStorage.getItem("email") + " - " + localStorage.getItem("userType")}</Button>
+          </Link>}
+        {button && (localStorage.getItem("isLoggedIn") === "true" ? true : false) && <Link to='/'><Button onClick = {handleSignOut => {
+          window.location.reload();
+          window.location.replace("/");
+          localStorage.setItem('isLoggedIn', 'false');
+          localStorage.setItem('userType', 'false');
+            localStorage.setItem('username', 'false');
+          }} buttonStyle='btn--outline'>Sign out</Button></Link>}
         </div>
       </nav>
+        }
     </>
   );
 }

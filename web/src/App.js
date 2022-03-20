@@ -18,6 +18,7 @@ import EventDetails from './components/pages/EventDetails';
 import AddEvent from './components/pages/AddEvent';
 import ArtistApplicant from './components/pages/ArtistApplicant'
 import ArtistRequest from './components/pages/ArtistRequest'
+import { Redirect } from 'react-router-dom'
 
 function App() {
   return (
@@ -26,8 +27,16 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/"><Home /></Route>
+          {/* {localStorage.getItem("isLoggedIn") === "false" ?
+            <Route exact path="/"><Home /></Route>
+            :
+            localStorage.getItem("userType") === "artist" ?
+              <Route exact path="/"><Redirect to="/artist/home" /></Route>
+              :
+              <Route exact path="/"><Redirect to="/organizer/home" /></Route>
+          } */}
           <Route path="/services"><Services /></Route>
-          <Route path="/products"><Products /></Route> 
+          <Route path="/products"><Products /></Route>
           <Route path="/sign-up"><SignUp /></Route>
           <Route path="/sign-in"><LogIn /></Route>
           <Route exact path="/artist/home"><ArtistHome /></Route>

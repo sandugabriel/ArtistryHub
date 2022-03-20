@@ -10,7 +10,7 @@ import { myEvents } from './DB'
 import { allArtists } from './DB'
 
 export default function OrganizerHome() {
-  const listArtists = allArtists.map((artist) => 
+  const listArtists = allArtists.map((artist) =>
     <li key={artist.id} className='artist-item'>
       <Card style={{ width: '18rem' }}>
         <Card.Img variant="top" src="/images/img-2.jpg" style={{ width: '100%' }}/>
@@ -36,7 +36,7 @@ export default function OrganizerHome() {
     <>
       <div className='filters'>
         <div className='filter-container'>
-          <label for="artist-type">Artist type</label>
+          <label htmlFor="artist-type">Artist type</label>
           <select name="artist-type">
             <option value="dj">DJ</option>
             <option value="photographer">Photographer</option>
@@ -98,7 +98,7 @@ export default function OrganizerHome() {
         <Button className='apply-filters-button filter-container' variant="primary">Apply filters</Button>
 
       </div>
-      
+
       <ul className='artists-list' style={{boxShadow: 'none'}}>
         {listArtists}
       </ul>;

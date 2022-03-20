@@ -10,32 +10,32 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   // const [button, setButton] = useState(true);
-  localStorage.setItem("email", "");
-  localStorage.setItem("userType", "");
-  localStorage.setItem("isLoggedIn", false);
+  // localStorage.setItem("email", "");
+  // localStorage.setItem("userType", "");
+  // localStorage.setItem("isLoggedIn", false);
   return (
     <>
         <div className='home'>
-          
+
           <Link
             to='/artist/sign-up'
             // className='nav-links-mobile'
             // onClick={closeMobileMenu}
           >
             <Button buttonStyle='btn--signup'>Sign up as an artist</Button>
-            
+
           </Link>
-          
+
           <Link
             to='/organizer/sign-up'
             // className='nav-links-mobile'
             // onClick={closeMobileMenu}
           >
             <Button buttonStyle='btn--signup'>Sign up as an organizer</Button>
-            
+
           </Link>
         </div>
-        
+
 
         <Footer />
     </>

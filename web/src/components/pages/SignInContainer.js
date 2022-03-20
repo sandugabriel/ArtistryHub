@@ -14,7 +14,9 @@ class SignInContainer extends Component {
     // this.isLoggedIn = false;
 
     this.state = {
-      errors: {},
+      errors: {
+        message: ""
+      },
       user: {
         username: "",
         email: "",
@@ -44,7 +46,7 @@ class SignInContainer extends Component {
 
   handleChange(event) {
     console.log("handleChange");
-      
+
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
@@ -56,7 +58,7 @@ class SignInContainer extends Component {
 
   handleType(event) {
     console.log("handleType");
-      
+
     // const field = event.target.name;
     // const user = this.state.user;
     // user[field] = event.target.value;
@@ -68,7 +70,7 @@ class SignInContainer extends Component {
 
   handleLogin(user) {
     console.log("handleLogin");
-      
+
     // const field = event.target.name;
     // const user = this.state.user;
     // user[field] = event.target.value;
@@ -106,38 +108,44 @@ class SignInContainer extends Component {
     }
   }
 
-  submitSignin(user) {
+  async makeGetRequest(url) {
+
+    let res = await axios.post(url);
+
+    let data = res.data;
+    console.log(data);
+    return data
+  }
+
+  async submitSignin(user) {
     console.log("submitSignin");
+    if (user.userType === 'artist') {
+      let root_url = 'http://127.0.0.1:4996/validateloginartist?email=' + user.email + '&password=' + user.pw;
+      let submitURL = new URL(root_url);
+      let val = await this.makeGetRequest(submitURL);
+      console.log(val)
+      if(val === true) {
+        localStorage.setItem("email", this.state.user.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("isLoggedIn", 'true');
 
-    var params = {password: user.pw, email: user.email, userType: user.userType };
+        // window.location.reload();
+        window.location.replace('/artist/home')
+      }
 
-    console.log(params);
+    } else {
+      let root_url = 'http://127.0.0.1:4996/validateloginorganizer?email=' + user.email + '&password=' + user.pw;
+      let submitURL = new URL(root_url);
+      let val = await this.makeGetRequest(submitURL);
+      console.log(val)
+      if(val === true) {
+        localStorage.setItem("email", this.state.user.email);
+        localStorage.setItem("userType", this.state.userType)
+        localStorage.setItem("isLoggedIn", 'true');
+      }
 
-    // this.handleLogin(user);
-    // let isLoggedIn = false;
+    }
 
-    console.log("1");
-    // console.log(db.collection(params.userType)
-    // .get()
-    // .then(function(querySnapshot) {
-    //     querySnapshot.forEach(function(doc) {
-    //         let userData = doc.data();
-    //         let email = userData.email;
-    //         let password = userData.password;
-    //         if (params.email === email && params.password === password) {
-    //           console.log("DA");
-    //           // isLoggedIn = true;
-    //           // this.isLoggedIn = true;
-    //           localStorage.setItem("email", params.email);
-    //           localStorage.setItem("userType", params.userType);
-    //           localStorage.setItem("isLoggedIn", true);
-    //           // this.handleLogin(user);
-    //         }
-    //     });
-    // })
-    // .catch(function(error) {
-    //     console.log("Error getting documents: ", error);
-    // }));
     this.forceUpdate();
 
   }
@@ -147,7 +155,7 @@ class SignInContainer extends Component {
     event.preventDefault();
     var payload = validateSignUpForm(this.state.user);
     // console.log(payload)
-    
+
     console.log(this.state);
     var user = {
       email: this.state.user.email,

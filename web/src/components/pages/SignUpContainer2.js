@@ -35,7 +35,7 @@ class SignUpContainer2 extends Component {
 
   handleChange(event) {
     console.log("handleChange");
-      
+
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
@@ -81,11 +81,11 @@ class SignUpContainer2 extends Component {
     return data
   }
 
-  submitSignup(user) {
+  async submitSignup(user) {
     console.log("submitSignup");
     var params = { username: user.usr, password: user.pw, email: user.email };
     console.log(params);
-    let root_url = '127.0.0.1/createorganizer?username=' + user.usr + '&password' + user.pw  + '&email' + user.email
+    let root_url = 'http://127.0.0.1:4996/createorganizer?username=' + user.usr + '&password=' + user.pw  + '&email=' + user.email + '&first_name=john&last_name=dorian'
     let submitURL = new URL(root_url)
     await this.makeGetRequest(submitURL)
 
@@ -93,9 +93,9 @@ class SignUpContainer2 extends Component {
   validateForm(event) {
     console.log("validateForm");
     event.preventDefault();
-    var payload = validateSignUpForm(this.state.user);
+    // var payload = validateSignUpForm(this.state.user);
     // console.log(payload)
-    
+
     var user = {
         usr: this.state.user.username,
         pw: this.state.user.password,
@@ -103,7 +103,7 @@ class SignUpContainer2 extends Component {
     };
     this.submitSignup(user);
     window.location.href = "/sign-in"
-    
+
   }
 
   pwMask(event) {
