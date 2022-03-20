@@ -12,21 +12,6 @@ import { Link } from 'react-router-dom';
 let formData = new FormData(); 
 
 function handleSignup(event) {
-  // event.preventDefault();
-
-  // console.log("handle signup!!");
-
-  // console.log(db.collection('artist')
-  //   .get()
-  //   .then(function(querySnapshot) {
-  //       querySnapshot.forEach(function(doc) {
-  //           // doc.data() is never undefined for query doc snapshots
-  //           console.log(doc.id, " => ", doc.data());
-  //       });
-  //   })
-  //   .catch(function(error) {
-  //       console.log("Error getting documents: ", error);
-  //   }));
 };
 
 const SignUpForm = ({
